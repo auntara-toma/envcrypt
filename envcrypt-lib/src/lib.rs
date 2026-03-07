@@ -237,8 +237,24 @@ impl EnvcryptLoader {
         for line in content.lines() {
             let trimmed = line.trim();
 
-            // Preserve empty lines and comments
-            if trimmed.is_empty() || trimmed.starts_with('#') {
+            // Preserve empty lines
+            if trimmed.is_empty() {
+                output.push_str(line);
+                output.push('\n');
+                continue;
+            }
+
+            // Handle commented-out KEY=VALUE lines
+            if trimmed.starts_with('#') {
+                let after_hash = trimmed[1..].trim_start();
+                if let Some((key, value)) = parse_env_line(after_hash) {
+                    if !value.starts_with(ENCRYPTED_PREFIX) {
+                        let encrypted = self.encrypt(value)?;
+                        output.push_str(&format!("# {}={}", key, encrypted));
+                        output.push('\n');
+                        continue;
+                    }
+                }
                 output.push_str(line);
                 output.push('\n');
                 continue;
@@ -269,8 +285,24 @@ impl EnvcryptLoader {
         for line in content.lines() {
             let trimmed = line.trim();
 
-            // Preserve empty lines and comments
-            if trimmed.is_empty() || trimmed.starts_with('#') {
+            // Preserve empty lines
+            if trimmed.is_empty() {
+                output.push_str(line);
+                output.push('\n');
+                continue;
+            }
+
+            // Handle commented-out KEY=VALUE lines
+            if trimmed.starts_with('#') {
+                let after_hash = trimmed[1..].trim_start();
+                if let Some((key, value)) = parse_env_line(after_hash) {
+                    if value.starts_with(ENCRYPTED_PREFIX) {
+                        let decrypted = self.decrypt(value)?;
+                        output.push_str(&format!("# {}={}", key, decrypted));
+                        output.push('\n');
+                        continue;
+                    }
+                }
                 output.push_str(line);
                 output.push('\n');
                 continue;
@@ -554,6 +586,41 @@ mod tests {
         // Count occurrences of encrypted: - should still be 2 (one original, one new)
         let count = result.matches("encrypted:").count();
         assert_eq!(count, 2);
+    }
+
+    #[test]
+    fn test_encrypt_content_commented_key_value() {
+        let loader = create_loader();
+        let content = "# DB_URL=postgres://localhost\nAPI_KEY=secret\n";
+        let encrypted = loader.encrypt_content(content).unwrap();
+
+        assert!(encrypted.contains("# DB_URL=encrypted:"));
+        assert!(encrypted.contains("API_KEY=encrypted:"));
+
+        let decrypted = loader.decrypt_content(&encrypted).unwrap();
+        assert!(decrypted.contains("# DB_URL=postgres://localhost"));
+        assert!(decrypted.contains("API_KEY=secret"));
+    }
+
+    #[test]
+    fn test_encrypt_content_preserves_pure_comments() {
+        let loader = create_loader();
+        let content = "# This is a note\n# Another comment\nKEY=value\n";
+        let encrypted = loader.encrypt_content(content).unwrap();
+
+        assert!(encrypted.contains("# This is a note"));
+        assert!(encrypted.contains("# Another comment"));
+    }
+
+    #[test]
+    fn test_encrypt_content_commented_already_encrypted() {
+        let loader = create_loader();
+        let encrypted_val = loader.encrypt("secret").unwrap();
+        let content = format!("# ALREADY={}\n", encrypted_val);
+
+        let result = loader.encrypt_content(&content).unwrap();
+        // Should not double-encrypt
+        assert_eq!(result.matches("encrypted:").count(), 1);
     }
 
     #[test]
