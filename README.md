@@ -1,0 +1,166 @@
+# envcrypt
+
+Encrypt and decrypt `.env` file values securely using AES-256-GCM.
+
+## Why envcrypt?
+
+`.env` files often contain sensitive secrets like API keys, database credentials, and tokens. In plain text, these are vulnerable to accidental exposure — a misplaced `git add`, a screen share, or an AI coding agent reading your project files can all leak secrets unintentionally.
+
+Envcrypt solves this by encrypting your `.env` values in place. The workflow is simple:
+
+1. **Encrypt** your `.env` file using the `envcrypt` CLI tool
+2. **Read** encrypted values directly in your Rust program using the `envcrypt-lib` library — decryption happens transparently at runtime
+
+This is especially useful in the era of agentic coding, where AI assistants routinely read project files. With envcrypt, your `.env` file can stay in your project directory without exposing raw secrets to any tool or agent that accesses it.
+
+## Features
+
+- AES-256-GCM encryption (authenticated encryption)
+- Encrypted values prefixed with `encrypted:` for easy identification
+- CLI tool for encrypting/decrypting `.env` files
+- Library for loading encrypted `.env` files in Rust programs
+- Key stored in `~/.envcrypt.yaml`
+
+## Installation
+
+```bash
+cargo install --path envcrypt
+```
+
+## CLI Usage
+
+### Initialize (first time)
+
+```bash
+# Generate random key
+envcrypt init --generate
+
+# Or provide your own key (64 hex chars = 32 bytes)
+envcrypt init --key "your-64-character-hex-key-here..."
+```
+
+### Encrypt a .env file
+
+```bash
+# Output to stdout
+envcrypt encrypt .env
+
+# Output to file
+envcrypt encrypt .env -o .env.encrypted
+
+# Modify in-place
+envcrypt encrypt .env --in-place
+```
+
+### Decrypt a .env file
+
+```bash
+# Output to stdout
+envcrypt decrypt .env.encrypted
+
+# Output to file  
+envcrypt decrypt .env.encrypted -o .env
+
+# Modify in-place
+envcrypt decrypt .env.encrypted --in-place
+```
+
+### Encrypt/decrypt single values
+
+```bash
+envcrypt encrypt-value "my-secret"
+# Output: encrypted:base64...
+
+envcrypt decrypt-value "encrypted:base64..."
+# Output: my-secret
+```
+
+### Check status
+
+```bash
+envcrypt status
+```
+
+## Library Usage
+
+Add to your `Cargo.toml`:
+
+```toml
+[dependencies]
+envcrypt-lib = { path = "../envcrypt-lib" }  # or from crates.io when published
+```
+
+### Basic usage (from config file)
+
+```rust
+use envcrypt_lib::EnvcryptLoader;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Load key from ~/.envcrypt.yaml
+    let loader = EnvcryptLoader::from_config(None)?;
+    
+    // Load .env and set environment variables
+    loader.load(".env")?;
+    
+    // Now accessible via std::env
+    let db_url = std::env::var("DATABASE_URL")?;
+    println!("DB: {}", db_url);
+    
+    Ok(())
+}
+```
+
+### Hardcoded key
+
+```rust
+use envcrypt_lib::EnvcryptLoader;
+
+// Key as hex string (64 chars = 32 bytes)
+let loader = EnvcryptLoader::from_key("your-64-char-hex-key...")?;
+loader.load(".env")?;
+```
+
+### With litcrypt (obfuscated key in binary)
+
+```rust
+use litcrypt::{use_litcrypt, lc};
+use envcrypt_lib::EnvcryptLoader;
+
+use_litcrypt!("MY_OBFUSCATION_KEY");
+
+fn main() {
+    let key = lc!("your-64-char-hex-key...");
+    let loader = EnvcryptLoader::from_key(&key).unwrap();
+    loader.load(".env").unwrap();
+}
+```
+
+## .env File Format
+
+```env
+# Comments are preserved
+DATABASE_URL=encrypted:base64encodeddata...
+API_KEY=encrypted:base64encodeddata...
+PLAIN_VALUE=this-is-not-encrypted
+```
+
+Encrypted values have the `encrypted:` prefix. Plain values are passed through as-is.
+
+## Security
+
+- **Algorithm**: AES-256-GCM (authenticated encryption with associated data)
+- **Nonce**: 12 bytes, randomly generated per encryption
+- **Key**: 32 bytes (256 bits), stored in config file
+- **Format**: `encrypted:<base64(nonce + ciphertext + tag)>`
+
+## Config File
+
+Location: `~/.envcrypt.yaml`
+
+```yaml
+key: "64-character-hex-encoded-key..."
+```
+
+## License
+
+MIT
