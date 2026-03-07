@@ -1,6 +1,6 @@
 # envcrypt
 
-Encrypt and decrypt `.env` file values securely using AES-256-GCM.
+Secure your `.env` files from accidental leaks.
 
 ## Why envcrypt?
 
