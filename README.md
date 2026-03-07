@@ -7,7 +7,7 @@ Secure your `.env` files from accidental leaks.
 Envcrypt solves this by encrypting your `.env` values in place. The workflow is simple:
 
 1. **Encrypt** your `.env` file using the `envcrypt` CLI tool
-2. **Read** encrypted values directly in your Rust program using the `envcrypt-lib` library, decryption happens transparently at runtime
+2. **Read** encrypted values directly in your application — decryption happens transparently at runtime
 
 This is especially useful in the era of agentic coding, where AI assistants routinely read project files. With envcrypt, your `.env` file can stay in your project directory without exposing raw secrets to any tool or agent that accesses it.
 
@@ -16,14 +16,39 @@ This is especially useful in the era of agentic coding, where AI assistants rout
 - AES-256-GCM encryption (authenticated encryption)
 - Encrypted values prefixed with `encrypted:` for easy identification
 - CLI tool for encrypting/decrypting `.env` files
-- Library for loading encrypted `.env` files in Rust programs
+- Libraries for Rust, TypeScript/JavaScript, and Python
+- Cross-language compatibility — files encrypted with the CLI can be loaded from any supported language
 - Key stored in `~/.envcrypt.yaml`
 
+## Project Structure
+
+```
+envcrypt/
+├── cli/                  # CLI tool (Rust)
+└── libs/
+    ├── rust/             # Rust library (envcrypt-lib)
+    ├── typescript/       # TypeScript/JavaScript library
+    └── python/           # Python library
+```
+
 ## Installation
+
+### CLI
 
 ```bash
 cargo install --path cli
 ```
+
+### Libraries
+
+- **Rust**: `envcrypt-lib = { path = "libs/rust" }` in your `Cargo.toml`
+- **TypeScript/JavaScript**: `npm install envcrypt`
+- **Python**: `pip install envcrypt`
+
+See each library's README for detailed usage:
+- [Rust library](libs/rust/)
+- [TypeScript library](libs/typescript/)
+- [Python library](libs/python/)
 
 ## CLI Usage
 
@@ -56,7 +81,7 @@ envcrypt encrypt .env --in-place
 # Output to stdout
 envcrypt decrypt .env.encrypted
 
-# Output to file  
+# Output to file
 envcrypt decrypt .env.encrypted -o .env
 
 # Modify in-place
@@ -79,58 +104,38 @@ envcrypt decrypt-value "encrypted:base64..."
 envcrypt status
 ```
 
-## Library Usage
+## Quick Start (Library)
 
-Add to your `Cargo.toml`:
-
-```toml
-[dependencies]
-envcrypt-lib = { path = "../lib" }  # or from crates.io when published
-```
-
-### Basic usage (from config file)
+### Rust
 
 ```rust
 use envcrypt_lib::EnvcryptLoader;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Load key from ~/.envcrypt.yaml
     let loader = EnvcryptLoader::from_config(None)?;
-    
-    // Load .env and set environment variables
     loader.load(".env")?;
-    
-    // Now accessible via std::env
     let db_url = std::env::var("DATABASE_URL")?;
-    println!("DB: {}", db_url);
-    
     Ok(())
 }
 ```
 
-### Hardcoded key
+### TypeScript
 
-```rust
-use envcrypt_lib::EnvcryptLoader;
+```typescript
+import { loadFromConfig } from "envcrypt";
 
-// Key as hex string (64 chars = 32 bytes)
-let loader = EnvcryptLoader::from_key("your-64-char-hex-key...")?;
-loader.load(".env")?;
+loadFromConfig(".env");
+console.log(process.env.DATABASE_URL);
 ```
 
-### With litcrypt (obfuscated key in binary)
+### Python
 
-```rust
-use litcrypt::{use_litcrypt, lc};
-use envcrypt_lib::EnvcryptLoader;
+```python
+import envcrypt
+import os
 
-use_litcrypt!("MY_OBFUSCATION_KEY");
-
-fn main() {
-    let key = lc!("your-64-char-hex-key...");
-    let loader = EnvcryptLoader::from_key(&key).unwrap();
-    loader.load(".env").unwrap();
-}
+envcrypt.load(".env")
+db_url = os.environ["DATABASE_URL"]
 ```
 
 ## .env File Format
