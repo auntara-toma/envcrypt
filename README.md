@@ -22,7 +22,7 @@ This is especially useful in the era of agentic coding, where AI assistants rout
 ## Installation
 
 ```bash
-cargo install --path envcrypt
+cargo install --path cli
 ```
 
 ## CLI Usage
@@ -85,7 +85,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-envcrypt-lib = { path = "../envcrypt-lib" }  # or from crates.io when published
+envcrypt-lib = { path = "../lib" }  # or from crates.io when published
 ```
 
 ### Basic usage (from config file)
