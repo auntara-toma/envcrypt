@@ -2,14 +2,12 @@
 
 Secure your `.env` files from accidental leaks.
 
-## Why envcrypt?
-
-`.env` files often contain sensitive secrets like API keys, database credentials, and tokens. In plain text, these are vulnerable to accidental exposure — a misplaced `git add`, a screen share, or an AI coding agent reading your project files can all leak secrets unintentionally.
+`.env` files often contain sensitive secrets like API keys, database credentials, and tokens. In plain text, these are vulnerable to accidental exposure, a misplaced `git add`, a screen share, or an AI coding agent reading your project files can all leak secrets unintentionally.
 
 Envcrypt solves this by encrypting your `.env` values in place. The workflow is simple:
 
 1. **Encrypt** your `.env` file using the `envcrypt` CLI tool
-2. **Read** encrypted values directly in your Rust program using the `envcrypt-lib` library — decryption happens transparently at runtime
+2. **Read** encrypted values directly in your Rust program using the `envcrypt-lib` library, decryption happens transparently at runtime
 
 This is especially useful in the era of agentic coding, where AI assistants routinely read project files. With envcrypt, your `.env` file can stay in your project directory without exposing raw secrets to any tool or agent that accesses it.
 
